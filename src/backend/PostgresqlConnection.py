@@ -14,7 +14,3 @@ class PostgresqlConnection(AbstractConnection):
 
     def version(self):
         return self._execute_and_fetch_one("SELECT version();")
-
-    def create_table(self, name: str,  *args) -> None:
-        query = f"CREATE TABLE {name} ({args.join(', ')});"
-        self._execute(query)

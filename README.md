@@ -35,10 +35,15 @@ sudo -u postgres psql -c "CREATE USER pollo_admin WITH PASSWORD 'password';"
 sudo -u postgres psql -c "CREATE DATABASE pollo_library OWNER pollo_admin;"
 ```
 
-Guardar variables en .env
+Guardar variables en config.ini
 
-```env
-
+```ini
+[db]
+host=localhost
+database=pollo_library
+user=pollo_admin
+password=password
+port=5432
 
 ```
 

@@ -1,8 +1,4 @@
-from typing import List, Optional, Union
-from src.model.Model import Model
 import psycopg2
-
-from src.model import Model
 
 
 class AbstractConnection:
@@ -33,19 +29,4 @@ class AbstractConnection:
         return results
 
     def version(self):
-        raise NotImplemented()
-
-    def create_table(self, name: str,  *args) -> None:
-        raise NotImplemented()
-
-    def insert_table(self, name: str,  values: Union[List, tuple]) -> None:
-        raise NotImplemented()
-
-    def select_table(self, name: str, columns: Union[List, tuple], filter: str = "", order: str = "") -> List[Model]:
-        raise NotImplemented()
-
-    def update(self, name: str, values: Union[List, tuple], filter: str = "") -> None:
-        raise NotImplemented()
-
-    def delete(self, name: str, filter: str = "") -> None:
         raise NotImplemented()
