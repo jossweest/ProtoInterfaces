@@ -27,7 +27,7 @@ class CompraCabecera(Model):
         CREATE TABLE IF NOT EXISTS {self.table} (
             IdCompra SERIAL PRIMARY KEY,
             Fecha DATE NOT NULL,
-            IdCliente VARCHAR(255) NOT NULL REFERENCES Clientes(IdCliente),
+            IdCliente INT NOT NULL REFERENCES Clientes(IdCliente),
             TotalCompra DECIMAL(10, 2) NOT NULL
         );
         """
@@ -53,13 +53,12 @@ class CompraCabecera(Model):
         WHERE IdCompra = {self.IdCompra};
         """
 
-    @classmethod
-    def select(cls, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[CompraCabecera]:
-        query = cls._select_query(columns, where, order_by, limit)
-        results = cls._execute_and_fetch_all(query)
+    def select(self, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[CompraCabecera]:
+        query = self._select_query(columns, where, order_by, limit)
+        results = self._execute_and_fetch_all(query)
 
         for result in results:
-            yield cls(
+            yield self(
                 IdCompra=result[0],
                 Fecha=result[1],
                 Cliente=Cliente(IdCliente=result[2]),

@@ -5,11 +5,10 @@ from src.backend.PostgresqlConnection import PostgresqlConnection
 
 @dataclass
 class Model(PostgresqlConnection):
-    table: str = field(default_factory=str)
 
     @property
     def fields(self) -> List[str]:
-        return [field.name for field in self.__dataclass_fields__.values() if not field.name in ["table", "id"]]
+        return [field.name for field in self.__dataclass_fields__.values() if not field.name in ["id"]]
 
     def create_table(self) -> None:
         """Crea la tabla en la base de datos"""
@@ -43,8 +42,7 @@ class Model(PostgresqlConnection):
             "Subclasses must implement insert method"
         )
 
-    @classmethod
-    def select(cls, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[Any]:
+    def select(self, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[Any]:
         raise NotImplementedError(
             "Subclasses must implement select method"
         )
@@ -61,9 +59,13 @@ class Model(PostgresqlConnection):
             "Subclasses must implement delete method"
         )
 
-    @classmethod
+    def drop_table(self) -> None:
+        """Elimina la tabla de la base de datos"""
+        query = f"DROP TABLE IF EXISTS {self.table} CASCADE;"
+        self._execute(query)
+
     def _select_query(
-        cls,
+        self,
         columns: Optional[List[str]] = None,
         where: Optional[str] = None,
         order_by: Optional[str] = None,
@@ -71,7 +73,7 @@ class Model(PostgresqlConnection):
     ) -> str:
         """Genera el SQL para seleccionar registros de la tabla"""
         column_list = "*" if not columns else ", ".join(columns)
-        query = f"SELECT {column_list} FROM {cls.table}"
+        query = f"SELECT {column_list} FROM {self.table}"
 
         if where:
             query += f" WHERE {where}"

@@ -1,4 +1,4 @@
-from dataclasses import field
+from dataclasses import dataclass, field
 from src.model.Model import Model
 from src.model.Libro import Libro
 from typing import Optional, List, Iterable
@@ -7,6 +7,7 @@ from typing import Optional, List, Iterable
 # - [] Ejemplares(ISBN, cantidadExistencia, precioVenta)
 
 
+@dataclass
 class Ejemplares(Model):
     table: str = "Ejemplares"
     libro: Libro = field(default_factory=Libro)
@@ -50,13 +51,12 @@ class Ejemplares(Model):
         WHERE ISBN = '{self.libro.id}';
         """
 
-    @classmethod
-    def select(cls, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[Ejemplares]:
-        query = cls._select_query(columns, where, order_by, limit)
-        results = cls._execute_and_fetch_all(query)
+    def select(self, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[Ejemplares]:
+        query = self._select_query(columns, where, order_by, limit)
+        results = self._execute_and_fetch_all(query)
 
         for result in results:
-            yield cls(
+            yield self(
                 libro=Libro(ISBN=result[0]),
                 cantidadExistencia=result[1],
                 precioVenta=result[2]

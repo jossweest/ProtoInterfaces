@@ -1,6 +1,6 @@
 from dataclasses import field
 from src.model.Model import Model
-from typing import Optional, Iterable
+from typing import Optional, Iterable, List
 
 
 # - [] Editorial(IdEditorial, nombre)
@@ -8,51 +8,50 @@ from typing import Optional, Iterable
 
 class Editorial(Model):
     table: str = "Editoriales"
-    idEditorial: str = field(default_factory=str)
+    idEditorial: int = field(default_factory=int)
     Nombre: str = field(default_factory=str)
 
     @property
-    def id(self) -> str:
+    def id(self) -> int:
         return self.idEditorial
 
     @id.setter
-    def id(self, value: str):
+    def id(self, value: int):
         self.idEditorial = value
 
     def _create_table_query(self) -> str:
         return f"""
         CREATE TABLE IF NOT EXISTS {self.table} (
-            idEditorial VARCHAR(255) PRIMARY KEY,
+            idEditorial SERIAL PRIMARY KEY,
             Nombre VARCHAR(255) NOT NULL
         );
         """
 
     def _insert_query(self) -> str:
         return f"""
-        INSERT INTO {self.table} (idEditorial, Nombre)
-        VALUES ('{self.idEditorial}', '{self.Nombre}');
+        INSERT INTO {self.table} (Nombre)
+        VALUES ('{self.Nombre}');
         """
 
     def _update_query(self) -> str:
         return f"""
         UPDATE {self.table}
         SET Nombre = '{self.Nombre}'
-        WHERE idEditorial = '{self.idEditorial}';
+        WHERE idEditorial = {self.idEditorial};
         """
 
     def _delete_query(self) -> str:
         return f"""
         DELETE FROM {self.table}
-        WHERE idEditorial = '{self.idEditorial}';
+        WHERE idEditorial = {self.idEditorial};
         """
 
-    @classmethod
-    def select(cls, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[Editorial]:
-        query = cls._select_query(columns, where, order_by, limit)
-        results = cls._execute_and_fetch_all(query)
+    def select(self, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[Editorial]:
+        query = self._select_query(columns, where, order_by, limit)
+        results = self._execute_and_fetch_all(query)
 
         for result in results:
-            yield cls(idEditorial=result[0], Nombre=result[1])
+            yield self(idEditorial=result[0], Nombre=result[1])
 
     def fetch_by_id(self) -> None:
         result = next(Editorial.select(

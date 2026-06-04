@@ -29,8 +29,8 @@ class Libro(Model):
         CREATE TABLE IF NOT EXISTS {self.table} (
             ISBN VARCHAR(255) PRIMARY KEY,
             Titulo VARCHAR(255) NOT NULL,
-            IdEditorial VARCHAR(255) NOT NULL REFERENCES Editoriales(idEditorial),
-            IdAutor VARCHAR(255) NOT NULL REFERENCES Autores(idAutor),
+            IdEditorial INT NOT NULL REFERENCES Editoriales(idEditorial),
+            IdAutor INT NOT NULL REFERENCES Autores(idAutor),
             Ubicacion VARCHAR(255) NOT NULL
         );
         """
@@ -57,13 +57,12 @@ class Libro(Model):
         WHERE ISBN = '{self.ISBN}';
         """
 
-    @classmethod
-    def select(cls, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[Libro]:
-        query = cls._select_query(columns, where, order_by, limit)
-        results = cls._execute_and_fetch_all(query)
+    def select(self, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[Libro]:
+        query = self._select_query(columns, where, order_by, limit)
+        results = self._execute_and_fetch_all(query)
 
         for result in results:
-            yield cls(
+            yield self(
                 ISBN=result[0],
                 Titulo=result[1],
                 Editorial=Editorial(idEditorial=result[2]),

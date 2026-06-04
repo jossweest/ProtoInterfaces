@@ -56,13 +56,12 @@ class CompraDetalle(Model):
         AND ISBN = '{self.libro.id}';
         """
 
-    @classmethod
-    def select(cls, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[CompraDetalle]:
-        query = cls._select_query(columns, where, order_by, limit)
-        results = cls._execute_and_fetch_all(query)
+    def select(self, columns: Optional[List[str]] = None, where: Optional[str] = None, order_by: Optional[str] = None, limit: Optional[int] = None) -> Iterable[CompraDetalle]:
+        query = self._select_query(columns, where, order_by, limit)
+        results = self._execute_and_fetch_all(query)
 
         for result in results:
-            yield cls(
+            yield self(
                 CompraCabecera=CompraCabecera(IdCompra=result[0]),
                 libro=Libro(ISBN=result[1]),
                 Cantidad=result[2],
