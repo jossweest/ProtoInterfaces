@@ -70,7 +70,7 @@ python main.py
 ### Interfaz gráfica
 
 - [x] De acuerdo al lenguaje programación de su elección, generar la conexión a la base de datos.
-- [ ] Generar dos pantallas para realizar el registro de datos, una pantalla para modificar y los siguientes reportes:
+- [x] Generar dos pantallas para realizar el registro de datos, una pantalla para modificar y los siguientes reportes:
 - [ ] Mostrar los datos de los libros incluidos en los pedido de una fecha determinada por el usuario.
 - [ ] Indicar el título de todos los libros cuya cantidad en stock sea menor a 5
 - [ ] Indicar el nombre de todos los libros registrados con el nombre de autor y editorial.

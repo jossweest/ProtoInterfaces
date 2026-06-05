@@ -15,6 +15,7 @@ from src.view.widgets.App.CompraDetalleView import CompraDetalleView
 from src.view.widgets.App.EditorialView import EditorialView
 from src.view.widgets.App.EjemplaresView import EjemplaresView
 from src.view.widgets.App.LibroView import LibroView
+from src.view.widgets.App.ReportesView import ReportesView
 
 
 class App(Window):
@@ -26,28 +27,39 @@ class App(Window):
         self.psql_connection = PostgresqlConnection()
         self.psql_connection.connect(**config())
 
-        self.geometry("1000x600")
+        self.geometry("1250x600")
 
         self.sidebar = Sidebar()
         self.sidebar.configure(width=200)
         self.sidebar.pack(side=tk.LEFT, fill=tk.Y)
 
         self.content = ttk.Frame(self)
+
         self.content.pack(expand=True, fill=tk.BOTH)
-        self.sidebar.addButton(
-            "Autores", lambda: AutorView(self.content, self.psql_connection))
-        self.sidebar.addButton(
-            "Clientes", lambda: ClienteView(self.content, self.psql_connection))
-        self.sidebar.addButton(
-            "Cabeceras de compras", lambda: CompraCabeceraView(self.content, self.psql_connection))
-        self.sidebar.addButton(
-            "Detalles de compras", lambda: CompraDetalleView(self.content, self.psql_connection))
-        self.sidebar.addButton(
-            "Editoriales", lambda: EditorialView(self.content, self.psql_connection))
-        self.sidebar.addButton(
-            "Ejemplares", lambda: EjemplaresView(self.content, self.psql_connection))
+
         self.sidebar.addButton(
             "Libros", lambda: LibroView(self.content, self.psql_connection))
+
+        self.sidebar.addButton(
+            "Autores", lambda: AutorView(self.content, self.psql_connection))
+
+        self.sidebar.addButton(
+            "Editoriales", lambda: EditorialView(self.content, self.psql_connection))
+
+        self.sidebar.addButton(
+            "Clientes", lambda: ClienteView(self.content, self.psql_connection))
+
+        self.sidebar.addButton(
+            "Cabeceras de compras", lambda: CompraCabeceraView(self.content, self.psql_connection))
+
+        self.sidebar.addButton(
+            "Detalles de compras", lambda: CompraDetalleView(self.content, self.psql_connection))
+
+        self.sidebar.addButton(
+            "Ejemplares", lambda: EjemplaresView(self.content, self.psql_connection))
+
+        self.sidebar.addButton(
+            "Reportes", lambda: ReportesView(self.content, self.psql_connection))
 
         self.sidebar.selectWidget("Libros")
 

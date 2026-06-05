@@ -24,17 +24,29 @@ class AbstractConnection:
 
     def _execute_and_fetch_one(self, query: str):
         cursor = self._connection.cursor()
-        cursor.execute(query)
-        result = cursor.fetchone()
-        cursor.close()
+        try:
+            cursor.execute(query)
+            results = cursor.fetchone()
+        except psycopg2.Error as e:
+            self._connection.rollback()
+            raise e
+        finally:
+            cursor.close()
+
+        return results
 
         return result
 
     def _execute_and_fetch_all(self, query: str):
         cursor = self._connection.cursor()
-        cursor.execute(query)
-        results = cursor.fetchall()
-        cursor.close()
+        try:
+            cursor.execute(query)
+            results = cursor.fetchall()
+        except psycopg2.Error as e:
+            self._connection.rollback()
+            raise e
+        finally:
+            cursor.close()
 
         return results
 
