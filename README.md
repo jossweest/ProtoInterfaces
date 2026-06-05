@@ -59,17 +59,17 @@ python main.py
 
 ### Base de datos
 
-- [ ] Libro(ISBN, Titulo, IdEditorial, IdAutor, Ubicacion)
-- [ ] Editorial(IdEditorial, nombre)
-- [ ] Autor(IdAutor, Nombre)
-- [ ] Ejemplares(ISBN, cantidadExistencia, precioVenta)
-- [ ] CompraCabecera(IdCompra, Fecha, IdCliente, TotalCompra)
-- [ ] CompraDetalle(IdCompra, ISBN, cantidad, precio)
-- [ ] Cliente(IdCliente, Nombre, Apellidos, CorreoElectronico, NumCelular)
+- [x] Libro(ISBN, Titulo, IdEditorial, IdAutor, Ubicacion)
+- [x] Editorial(IdEditorial, nombre)
+- [x] Autor(IdAutor, Nombre)
+- [x] Ejemplares(ISBN, cantidadExistencia, precioVenta)
+- [x] CompraCabecera(IdCompra, Fecha, IdCliente, TotalCompra)
+- [x] CompraDetalle(IdCompra, ISBN, cantidad, precio)
+- [x] Cliente(IdCliente, Nombre, Apellidos, CorreoElectronico, NumCelular)
 
 ### Interfaz gráfica
 
-- [ ] De acuerdo al lenguaje programación de su elección, generar la conexión a la base de datos.
+- [x] De acuerdo al lenguaje programación de su elección, generar la conexión a la base de datos.
 - [ ] Generar dos pantallas para realizar el registro de datos, una pantalla para modificar y los siguientes reportes:
 - [ ] Mostrar los datos de los libros incluidos en los pedido de una fecha determinada por el usuario.
 - [ ] Indicar el título de todos los libros cuya cantidad en stock sea menor a 5
@@ -77,5 +77,5 @@ python main.py
 
 ### Manejo de la base de datos
 
-- [ ] Crear la base de datos en el SGBD que haya elegido.
-- [ ] Insertar 15 registros en cada una de las tablas creadas.
+- [x] Crear la base de datos en el SGBD que haya elegido.
+- [x] Insertar 15 registros en cada una de las tablas creadas.

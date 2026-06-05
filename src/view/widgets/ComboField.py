@@ -13,8 +13,9 @@ class ComboField(ttk.Combobox):
         values: List[str] = None,
         width: int = DEFAULT_WIDTH,
         onChange: Optional[Callable[[str], None]] = None,
-        **kwargs,
+        ** kwargs,
     ):
+        kwargs.setdefault("state", "readonly")
         super().__init__(parent, width=width, **kwargs)
 
         if values:

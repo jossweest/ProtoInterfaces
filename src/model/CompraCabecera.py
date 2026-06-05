@@ -58,7 +58,7 @@ class CompraCabecera(Model):
         results = self._execute_and_fetch_all(query)
 
         for result in results:
-            yield self(
+            yield CompraCabecera(
                 IdCompra=result[0],
                 Fecha=result[1],
                 Cliente=Cliente(IdCliente=result[2]),

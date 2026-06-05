@@ -62,7 +62,7 @@ class Libro(Model):
         results = self._execute_and_fetch_all(query)
 
         for result in results:
-            yield self(
+            yield Libro(
                 ISBN=result[0],
                 Titulo=result[1],
                 Editorial=Editorial(idEditorial=result[2]),

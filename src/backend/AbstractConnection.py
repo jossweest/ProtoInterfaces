@@ -13,9 +13,14 @@ class AbstractConnection:
 
     def _execute(self, query):
         cursor = self._connection.cursor()
-        cursor.execute(query)
-        cursor.close()
-        self._connection.commit()
+        try:
+            cursor.execute(query)
+            self._connection.commit()
+        except psycopg2.Error as e:
+            self._connection.rollback()
+            raise e
+        finally:
+            cursor.close()
 
     def _execute_and_fetch_one(self, query: str):
         cursor = self._connection.cursor()

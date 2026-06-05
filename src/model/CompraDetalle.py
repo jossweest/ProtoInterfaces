@@ -10,18 +10,18 @@ from typing import Optional, List, Iterable
 @dataclass
 class CompraDetalle(Model):
     table: str = "CompraDetalle"
-    CompraCabecera: CompraCabecera = field(default_factory=CompraCabecera)
+    compraCabecera: CompraCabecera = field(default_factory=CompraCabecera)
     libro: Libro = field(default_factory=Libro)
     Cantidad: int = field(default_factory=int)
     Precio: float = field(default_factory=float)
 
     @property
     def id(self) -> int:
-        return self.CompraCabecera.id
+        return self.compraCabecera.id
 
     @id.setter
     def id(self, value: int):
-        self.CompraCabecera.id = value
+        self.compraCabecera.id = value
 
     def _create_table_query(self) -> str:
         return f"""
@@ -37,7 +37,7 @@ class CompraDetalle(Model):
     def _insert_query(self) -> str:
         return f"""
         INSERT INTO {self.table} (IdCompra, ISBN, Cantidad, Precio)
-        VALUES ({self.CompraCabecera.id}, '{self.libro.id}', {self.Cantidad}, {self.Precio});
+        VALUES ({self.compraCabecera.id}, '{self.libro.id}', {self.Cantidad}, {self.Precio});
         """
 
     def _update_query(self) -> str:
@@ -45,14 +45,14 @@ class CompraDetalle(Model):
         UPDATE {self.table}
         SET Cantidad = {self.Cantidad},
             Precio = {self.Precio}
-        WHERE IdCompra = {self.CompraCabecera.id}
+        WHERE IdCompra = {self.compraCabecera.id}
         AND ISBN = '{self.libro.id}';
         """
 
     def _delete_query(self) -> str:
         return f"""
         DELETE FROM {self.table}
-        WHERE IdCompra = {self.CompraCabecera.id}
+        WHERE IdCompra = {self.compraCabecera.id}
         AND ISBN = '{self.libro.id}';
         """
 
@@ -61,8 +61,8 @@ class CompraDetalle(Model):
         results = self._execute_and_fetch_all(query)
 
         for result in results:
-            yield self(
-                CompraCabecera=CompraCabecera(IdCompra=result[0]),
+            yield CompraDetalle(
+                compraCabecera=CompraCabecera(IdCompra=result[0]),
                 libro=Libro(ISBN=result[1]),
                 Cantidad=result[2],
                 Precio=result[3]
@@ -70,7 +70,7 @@ class CompraDetalle(Model):
 
     def fetch_by_id(self) -> None:
         result = next(CompraDetalle.select(
-            where=f"IdCompra = {self.CompraCabecera.id} AND ISBN = '{self.libro.id}'"), None)
+            where=f"IdCompra = {self.compraCabecera.id} AND ISBN = '{self.libro.id}'"), None)
         if result is not None:
             self.Cantidad = result.Cantidad
             self.Precio = result.Precio

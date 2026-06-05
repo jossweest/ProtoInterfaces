@@ -61,7 +61,7 @@ class Cliente(Model):
         results = self._execute_and_fetch_all(query)
 
         for result in results:
-            yield self(IdCliente=result[0], Nombre=result[1], Apellidos=result[2], CorreoElectronico=result[3], NumCelular=result[4])
+            yield Cliente(IdCliente=result[0], Nombre=result[1], Apellidos=result[2], CorreoElectronico=result[3], NumCelular=result[4])
 
     def fetch_by_id(self) -> None:
         result = next(Cliente.select(

@@ -56,7 +56,7 @@ class Ejemplares(Model):
         results = self._execute_and_fetch_all(query)
 
         for result in results:
-            yield self(
+            yield Ejemplares(
                 libro=Libro(ISBN=result[0]),
                 cantidadExistencia=result[1],
                 precioVenta=result[2]

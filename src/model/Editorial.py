@@ -51,7 +51,7 @@ class Editorial(Model):
         results = self._execute_and_fetch_all(query)
 
         for result in results:
-            yield self(idEditorial=result[0], Nombre=result[1])
+            yield Editorial(idEditorial=result[0], Nombre=result[1])
 
     def fetch_by_id(self) -> None:
         result = next(Editorial.select(
