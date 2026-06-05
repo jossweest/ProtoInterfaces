@@ -1,4 +1,4 @@
-from dataclasses import field
+from dataclasses import field, dataclass
 from src.model.Model import Model
 from src.model.Libro import Libro
 from src.model.CompraCabecera import CompraCabecera
@@ -7,7 +7,7 @@ from typing import Optional, List, Iterable
 
 # - [] CompraDetalle(IdCompra, ISBN, cantidad, precio)
 
-
+@dataclass
 class CompraDetalle(Model):
     table: str = "CompraDetalle"
     CompraCabecera: CompraCabecera = field(default_factory=CompraCabecera)

@@ -1,4 +1,4 @@
-from dataclasses import field
+from dataclasses import field, dataclass
 from src.model.Model import Model
 from src.model.Editorial import Editorial
 from src.model.Autor import Autor
@@ -7,7 +7,7 @@ from typing import Optional, List, Iterable
 
 # - [] Libro(ISBN, Titulo, IdEditorial, IdAutor, Ubicacion)
 
-
+@dataclass
 class Libro(Model):
     table: str = "Libro"
     ISBN: str = field(default_factory=str)

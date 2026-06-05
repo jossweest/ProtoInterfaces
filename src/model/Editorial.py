@@ -1,11 +1,11 @@
-from dataclasses import field
+from dataclasses import field, dataclass
 from src.model.Model import Model
 from typing import Optional, Iterable, List
 
 
 # - [] Editorial(IdEditorial, nombre)
 
-
+@dataclass
 class Editorial(Model):
     table: str = "Editoriales"
     idEditorial: int = field(default_factory=int)

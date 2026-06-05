@@ -1,4 +1,4 @@
-from dataclasses import field
+from dataclasses import field, dataclass
 from src.model.Model import Model
 from src.model.Cliente import Cliente
 from typing import Optional, List, Iterable
@@ -6,7 +6,7 @@ from typing import Optional, List, Iterable
 
 # - [] CompraCabecera(IdCompra, Fecha, IdCliente, TotalCompra)
 
-
+@dataclass
 class CompraCabecera(Model):
     table: str = "CompraCabecera"
     IdCompra: int = field(default_factory=int)

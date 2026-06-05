@@ -1,11 +1,12 @@
 from __future__ import annotations
-from dataclasses import field
+from dataclasses import field, dataclass
 from src.model.Model import Model
 from typing import Optional, Iterable
 
 # - [] Autor(IdAutor, Nombre)
 
 
+@dataclass
 class Autor(Model):
     table: str = "Autores"
     idAutor: int = field(default_factory=int)
