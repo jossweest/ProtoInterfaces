@@ -1,7 +1,8 @@
 import ttkbootstrap as ttk
 import tkinter as tk
 from ttkbootstrap.dialogs import Messagebox
-from tkinter import ttk as tkttk
+from datetime import datetime
+import re
 
 from src.view.widgets.DataTable import DataTable
 from src.view.widgets.LabeledEntry import LabeledEntry
@@ -17,7 +18,6 @@ class ReportesView(ttk.Frame):
         self.build_ui()
 
     def build_ui(self):
-        # Usamos un Notebook para organizar los tres reportes en pestañas
         self.notebook = ttk.Notebook(self)
         self.notebook.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
@@ -40,11 +40,9 @@ class ReportesView(ttk.Frame):
     # ─────────────────────────── REPORTE 1 ────────────────────────────────
 
     def _build_reporte_fecha(self):
-        # Marco superior para controles
         frame_controles = ttk.LabelFrame(self.tab_fecha, text="Parámetros")
         frame_controles.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
 
-        # Campo de fecha
         self.fecha_entry = LabeledEntry(
             frame_controles,
             label="Fecha del pedido (YYYY-MM-DD):",
@@ -52,7 +50,6 @@ class ReportesView(ttk.Frame):
         )
         self.fecha_entry.pack(side=tk.LEFT, padx=5, pady=5)
 
-        # Botón generar
         self.btn_generar_fecha = FormButton(
             frame_controles,
             text="Generar reporte",
@@ -61,7 +58,6 @@ class ReportesView(ttk.Frame):
         )
         self.btn_generar_fecha.pack(side=tk.LEFT, padx=5, pady=5)
 
-        # Tabla para resultados
         self.tabla_fecha = DataTable(
             self.tab_fecha,
             columns=["ISBN", "Título", "Cantidad", "Precio", "Fecha pedido"],
@@ -70,27 +66,55 @@ class ReportesView(ttk.Frame):
         self.tabla_fecha.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
     def _generar_reporte_fecha(self):
-        """Lógica para reporte 1 (pendiente de implementar)"""
-        fecha = self.fecha_entry.get()
+        fecha = self.fecha_entry.get().strip()
         if not fecha:
             Messagebox.show_warning(
-                "Por favor ingrese una fecha.", title="Validación")
+                "Ingrese una fecha en formato YYYY-MM-DD", title="Validación")
             return
-        # TODO: Implementar la consulta real
-        # Por ahora, solo mostrar un mensaje
-        Messagebox.show_info(
-            "Funcionalidad no implementada aún.\n"
-            f"Consultaría libros en pedidos con fecha: {fecha}",
-            title="Reporte"
-        )
-        # Limpiar tabla (opcional)
-        self.tabla_fecha.clear()
-        # Aquí se llenaría la tabla con los resultados
+
+        if not re.match(r'^\d{4}-\d{2}-\d{2}$', fecha):
+            Messagebox.show_warning(
+                "Formato de fecha inválido. Use YYYY-MM-DD", title="Validación")
+            return
+
+        try:
+            datetime.strptime(fecha, '%Y-%m-%d')
+        except ValueError:
+            Messagebox.show_warning(
+                "Fecha no válida (ejemplo: 2025-03-20)", title="Validación")
+            return
+
+        # Construir consulta con la fecha interpolada (ya validada)
+        query = f"""
+            SELECT 
+                l.isbn, 
+                l.titulo, 
+                cd.cantidad, 
+                cd.precio, 
+                cc.fecha
+            FROM compradetalle cd
+            JOIN compracabecera cc ON cd.idcompra = cc.idcompra
+            JOIN libro l ON cd.isbn = l.isbn
+            WHERE cc.fecha = '{fecha}'
+            ORDER BY cc.fecha, l.titulo;
+        """
+
+        try:
+            resultados = self.connection._execute_and_fetch_all(query)
+            self.tabla_fecha.clear()
+            if resultados:
+                self.tabla_fecha.insertMany(resultados)
+                Messagebox.show_info(
+                    f"Se encontraron {len(resultados)} registros.", title="Reporte")
+            else:
+                Messagebox.show_info(
+                    "No hay libros en pedidos para la fecha especificada.", title="Reporte")
+        except Exception as e:
+            Messagebox.show_error(f"Error al consultar: {e}", title="Error")
 
     # ─────────────────────────── REPORTE 2 ────────────────────────────────
 
     def _build_reporte_stock(self):
-        # Marco de controles (aunque este reporte no necesita parámetros)
         frame_controles = ttk.LabelFrame(self.tab_stock, text="Parámetros")
         frame_controles.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
 
@@ -105,7 +129,6 @@ class ReportesView(ttk.Frame):
         )
         self.btn_generar_stock.pack(side=tk.LEFT, padx=5, pady=5)
 
-        # Tabla para resultados
         self.tabla_stock = DataTable(
             self.tab_stock,
             columns=["ISBN", "Título", "Stock", "Ubicación"],
@@ -114,19 +137,34 @@ class ReportesView(ttk.Frame):
         self.tabla_stock.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
     def _generar_reporte_stock(self):
-        """Lógica para reporte 2 (pendiente de implementar)"""
-        # TODO: Implementar consulta de libros con stock < 5
-        Messagebox.show_info(
-            "Funcionalidad no implementada aún.\n"
-            "Consultaría libros con cantidad en stock menor a 5.",
-            title="Reporte"
-        )
-        self.tabla_stock.clear()
+        query = """
+            SELECT 
+                l.isbn, 
+                l.titulo, 
+                e.cantidadexistencia AS stock, 
+                l.ubicacion
+            FROM libro l
+            JOIN ejemplares e ON l.isbn = e.isbn
+            WHERE e.cantidadexistencia < 5
+            ORDER BY e.cantidadexistencia;
+        """
+
+        try:
+            resultados = self.connection._execute_and_fetch_all(query)
+            self.tabla_stock.clear()
+            if resultados:
+                self.tabla_stock.insertMany(resultados)
+                Messagebox.show_info(
+                    f"Se encontraron {len(resultados)} libros con stock bajo.", title="Reporte")
+            else:
+                Messagebox.show_info(
+                    "No hay libros con stock menor a 5.", title="Reporte")
+        except Exception as e:
+            Messagebox.show_error(f"Error al consultar: {e}", title="Error")
 
     # ─────────────────────────── REPORTE 3 ────────────────────────────────
 
     def _build_reporte_completo(self):
-        # Marco de controles (sin parámetros)
         frame_controles = ttk.LabelFrame(self.tab_completo, text="Parámetros")
         frame_controles.pack(side=tk.TOP, fill=tk.X, padx=5, pady=5)
 
@@ -141,7 +179,6 @@ class ReportesView(ttk.Frame):
         )
         self.btn_generar_completo.pack(side=tk.LEFT, padx=5, pady=5)
 
-        # Tabla para resultados
         self.tabla_completo = DataTable(
             self.tab_completo,
             columns=["ISBN", "Título", "Autor", "Editorial", "Ubicación"],
@@ -150,11 +187,28 @@ class ReportesView(ttk.Frame):
         self.tabla_completo.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
     def _generar_reporte_completo(self):
-        """Lógica para reporte 3 (pendiente de implementar)"""
-        # TODO: Consultar todos los libros con nombre de autor y editorial
-        Messagebox.show_info(
-            "Funcionalidad no implementada aún.\n"
-            "Consultaría todos los libros con autor y editorial.",
-            title="Reporte"
-        )
-        self.tabla_completo.clear()
+        query = """
+            SELECT 
+                l.isbn, 
+                l.titulo, 
+                a.nombre AS autor, 
+                e.nombre AS editorial, 
+                l.ubicacion
+            FROM libro l
+            JOIN autores a ON l.idautor = a.idautor
+            JOIN editoriales e ON l.ideditorial = e.ideditorial
+            ORDER BY l.titulo;
+        """
+
+        try:
+            resultados = self.connection._execute_and_fetch_all(query)
+            self.tabla_completo.clear()
+            if resultados:
+                self.tabla_completo.insertMany(resultados)
+                Messagebox.show_info(
+                    f"Se encontraron {len(resultados)} libros registrados.", title="Reporte")
+            else:
+                Messagebox.show_info(
+                    "No hay libros en la base de datos.", title="Reporte")
+        except Exception as e:
+            Messagebox.show_error(f"Error al consultar: {e}", title="Error")

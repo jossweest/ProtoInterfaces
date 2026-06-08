@@ -686,7 +686,7 @@ def main():
 
     # 1 - Detalles para compra 1
     detalle1 = CompraDetalle()
-    detalle1.CompraCabecera = compras_cabecera[0]
+    detalle1.compraCabecera = compras_cabecera[0]
     detalle1.libro = books[0]
     detalle1.Cantidad = 2
     detalle1.Precio = 259.80
@@ -694,7 +694,7 @@ def main():
 
     # 2 - Detalles para compra 2
     detalle2 = CompraDetalle()
-    detalle2.CompraCabecera = compras_cabecera[1]
+    detalle2.compraCabecera = compras_cabecera[1]
     detalle2.libro = books[1]
     detalle2.Cantidad = 2
     detalle2.Precio = 319.80
@@ -702,7 +702,7 @@ def main():
 
     # 3 - Detalles para compra 3
     detalle3 = CompraDetalle()
-    detalle3.CompraCabecera = compras_cabecera[2]
+    detalle3.compraCabecera = compras_cabecera[2]
     detalle3.libro = books[2]
     detalle3.Cantidad = 1
     detalle3.Precio = 379.80
@@ -710,7 +710,7 @@ def main():
 
     # 4 - Detalles para compra 4
     detalle4 = CompraDetalle()
-    detalle4.CompraCabecera = compras_cabecera[3]
+    detalle4.compraCabecera = compras_cabecera[3]
     detalle4.libro = books[3]
     detalle4.Cantidad = 3
     detalle4.Precio = 239.80
@@ -718,7 +718,7 @@ def main():
 
     # 5 - Detalles para compra 5
     detalle5 = CompraDetalle()
-    detalle5.CompraCabecera = compras_cabecera[4]
+    detalle5.compraCabecera = compras_cabecera[4]
     detalle5.libro = books[4]
     detalle5.Cantidad = 1
     detalle5.Precio = 279.80
@@ -726,7 +726,7 @@ def main():
 
     # 6 - Detalles para compra 6
     detalle6 = CompraDetalle()
-    detalle6.CompraCabecera = compras_cabecera[5]
+    detalle6.compraCabecera = compras_cabecera[5]
     detalle6.libro = books[5]
     detalle6.Cantidad = 2
     detalle6.Precio = 299.80
@@ -734,7 +734,7 @@ def main():
 
     # 7 - Detalles para compra 7
     detalle7 = CompraDetalle()
-    detalle7.CompraCabecera = compras_cabecera[6]
+    detalle7.compraCabecera = compras_cabecera[6]
     detalle7.libro = books[6]
     detalle7.Cantidad = 1
     detalle7.Precio = 339.80
@@ -742,7 +742,7 @@ def main():
 
     # 8 - Detalles para compra 8
     detalle8 = CompraDetalle()
-    detalle8.CompraCabecera = compras_cabecera[7]
+    detalle8.compraCabecera = compras_cabecera[7]
     detalle8.libro = books[7]
     detalle8.Cantidad = 3
     detalle8.Precio = 259.80
@@ -750,7 +750,7 @@ def main():
 
     # 9 - Detalles para compra 9
     detalle9 = CompraDetalle()
-    detalle9.CompraCabecera = compras_cabecera[8]
+    detalle9.compraCabecera = compras_cabecera[8]
     detalle9.libro = books[8]
     detalle9.Cantidad = 1
     detalle9.Precio = 219.80
@@ -758,7 +758,7 @@ def main():
 
     # 10 - Detalles para compra 10
     detalle10 = CompraDetalle()
-    detalle10.CompraCabecera = compras_cabecera[9]
+    detalle10.compraCabecera = compras_cabecera[9]
     detalle10.libro = books[9]
     detalle10.Cantidad = 2
     detalle10.Precio = 359.80
@@ -766,7 +766,7 @@ def main():
 
     # 11 - Detalles para compra 11
     detalle11 = CompraDetalle()
-    detalle11.CompraCabecera = compras_cabecera[10]
+    detalle11.compraCabecera = compras_cabecera[10]
     detalle11.libro = books[10]
     detalle11.Cantidad = 2
     detalle11.Precio = 239.80
@@ -774,7 +774,7 @@ def main():
 
     # 12 - Detalles para compra 12
     detalle12 = CompraDetalle()
-    detalle12.CompraCabecera = compras_cabecera[11]
+    detalle12.compraCabecera = compras_cabecera[11]
     detalle12.libro = books[11]
     detalle12.Cantidad = 2
     detalle12.Precio = 399.80
@@ -782,7 +782,7 @@ def main():
 
     # 13 - Detalles para compra 13
     detalle13 = CompraDetalle()
-    detalle13.CompraCabecera = compras_cabecera[12]
+    detalle13.compraCabecera = compras_cabecera[12]
     detalle13.libro = books[12]
     detalle13.Cantidad = 2
     detalle13.Precio = 299.80
@@ -790,7 +790,7 @@ def main():
 
     # 14 - Detalles para compra 14
     detalle14 = CompraDetalle()
-    detalle14.CompraCabecera = compras_cabecera[13]
+    detalle14.compraCabecera = compras_cabecera[13]
     detalle14.libro = books[13]
     detalle14.Cantidad = 2
     detalle14.Precio = 459.80
@@ -798,7 +798,7 @@ def main():
 
     # 15 - Detalles para compra 15
     detalle15 = CompraDetalle()
-    detalle15.CompraCabecera = compras_cabecera[14]
+    detalle15.compraCabecera = compras_cabecera[14]
     detalle15.libro = books[14]
     detalle15.Cantidad = 1
     detalle15.Precio = 279.80
