@@ -2,8 +2,7 @@
 
 **UNIVERSIDAD AUTÓNOMA DEL ESTADO DE MÉXICO**
 
-**Profesora:** Carol Leyva Pelaez
-
+**Profesora:** Carol Leyva Pelaez  
 **Materia:** Bases de Datos 1
 
 **Alumnos:**
@@ -11,31 +10,33 @@
 1. Irma Joseline Garcia Aguirre
 2. Gael González Méndez
 
-# Instalación
+---
 
-## Requisitos
+## Instalación
+
+### Requisitos
 
 - Python 3.8 o superior
 - PostgreSQL
 
-## Instalación
+### Dependencias
 
-Instalar las dependencias Python del proyecto:
+Instala las dependencias del proyecto con:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Configurar PostgreSQL
+### Configuración de PostgreSQL
 
-Crear un usuario y una base de datos (ejemplo):
+Crea el usuario y la base de datos:
 
 ```bash
 sudo -u postgres psql -c "CREATE USER pollo_admin WITH PASSWORD 'password';"
 sudo -u postgres psql -c "CREATE DATABASE pollo_library OWNER pollo_admin;"
 ```
 
-Guardar variables en config.ini
+Guarda las credenciales en `config.ini`:
 
 ```ini
 [db]
@@ -46,47 +47,37 @@ password=password
 port=5432
 ```
 
-## Ejecutar la aplicación
+> **Nota:** Es posible que PostgreSQL requiera configuración previa para habilitar la autenticación por contraseña.
 
-Ejecute la aplicación según la convención del proyecto. Por ejemplo:
+### Ejecución
 
 ```bash
 python3 main.pyw
 ```
 
-**Nota:** Es probable que Postgresql necesite de configuración previa para funcionar, será necesario habilitar la autenticación por contraseña
+---
 
-# Scripts
+## Scripts de utilidad
 
-1. Crear base de datos
+| Comando                             | Descripción                                  |
+| ----------------------------------- | -------------------------------------------- |
+| `python3 -m src.utils.CreateTables` | Crea las tablas en la base de datos          |
+| `python3 -m src.utils.InsertData`   | Inserta los registros precargados            |
+| `python3 -m src.utils.DropTables`   | Elimina todas las tablas de la base de datos |
 
-```bash
-python3 -m src.utils.CreateTables
-```
+---
 
-2. Agregar registros pre cargados
+## Vistas
 
-```bash
-python3 -m src.utils.InsertData
-```
-
-3. Eliminar tablas de la base de datos
-
-```bash
-python3 -m src.utils.DropTables
-```
-
-# Vistas
-
-## Libro
+### Libro
 
 ![Vista: Libro](images/Vista_libro.png)
 
-Componentes CRUD:
+Pantalla principal para gestionar el catálogo de libros. Permite registrar, consultar, modificar y eliminar libros del sistema.
 
-### CREATE
+#### CREATE
 
-**Crear tabla:**
+Crea la tabla en la base de datos:
 
 ```sql
 CREATE TABLE IF NOT EXISTS libro (
@@ -95,21 +86,21 @@ Titulo VARCHAR(255) NOT NULL,
 IdEditorial INT NOT NULL REFERENCES Editoriales(idEditorial),
 IdAutor INT NOT NULL REFERENCES Autores(idAutor),
 Ubicacion VARCHAR(255) NOT NULL
+);
 ```
 
-**Crear registro**
+Inserta un nuevo libro:
 
 ```sql
 INSERT INTO {table} (ISBN, Titulo, IdEditorial, IdAutor, Ubicacion)
 VALUES ('{ISBN}', '{Titulo}', '{Editorial.id}', '{selAutor.id}', '{Ubicación}');
 ```
 
-### READ
+#### READ
 
-La instrucción para obtener los registros de la base de datos se genera de manera automática a través del método de la clase Model
+La consulta de selección se genera automáticamente a través del método `_select_query` de la clase `Model`. Selecciona todos los registros de la tabla, con soporte opcional para filtros, ordenamiento y límite de resultados:
 
 ```python
-
 # src.model.Model.py
 def _select_query(
         self,
@@ -130,10 +121,11 @@ def _select_query(
             query += f" LIMIT {limit}"
 
         return f"{query};"
-
 ```
 
-### UPDATE
+#### UPDATE
+
+Actualiza los datos de un libro existente, identificado por su ISBN:
 
 ```sql
 UPDATE {table}
@@ -144,44 +136,46 @@ Ubicacion = '{Ubicación}'
 WHERE ISBN = '{ISBN}';
 ```
 
-### DELETE
+#### DELETE
+
+Elimina un libro de la tabla por su ISBN:
 
 ```sql
 DELETE FROM {table}
 WHERE ISBN = '{ISBN}';
 ```
 
-## Autor
+---
+
+### Autor
 
 ![Vista: Autor](images/Vista_autor.png)
 
-Componentes CRUD:
+Pantalla para gestionar el catálogo de autores registrados en el sistema.
 
-### CREATE
+#### CREATE
 
-**Crear tabla:**
+Crea la tabla en la base de datos:
 
 ```sql
 CREATE TABLE IF NOT EXISTS {table} (
-            idAutor SERIAL PRIMARY KEY,
-            Nombre VARCHAR(255) NOT NULL
-        );
-
+    idAutor SERIAL PRIMARY KEY,
+    Nombre VARCHAR(255) NOT NULL
+);
 ```
 
-**Crear registro**
+Inserta un nuevo autor:
 
 ```sql
 INSERT INTO {table} (Nombre)
 VALUES ('{Nombre}');
 ```
 
-### READ
+#### READ
 
-La instrucción para obtener los registros de la base de datos se genera de manera automática a través del método de la clase Model
+Al igual que en la vista de Libro, la consulta se genera dinámicamente a través de `_select_query`. Selecciona todos los autores registrados en la tabla:
 
 ```python
-
 # src.model.Model.py
 def _select_query(
         self,
@@ -204,7 +198,9 @@ def _select_query(
         return f"{query};"
 ```
 
-### UPDATE
+#### UPDATE
+
+Actualiza el nombre de un autor existente, identificado por su ID:
 
 ```sql
 UPDATE {table}
@@ -212,18 +208,24 @@ SET Nombre = '{Nombre}'
 WHERE idAutor = {idAutor};
 ```
 
-### DELETE
+#### DELETE
+
+Elimina un autor de la tabla por su ID:
 
 ```sql
 DELETE FROM {table}
 WHERE idAutor = {idAutor};
 ```
 
-# Reportes
+---
 
-## Pedidos por fecha
+## Reportes
+
+### Pedidos por fecha
 
 ![Vista de reporte: Libros solicitados en determinada fecha](images/Reporte_pedidos_por_fecha.png)
+
+Muestra todos los libros incluidos en los pedidos de una fecha específica, junto con su cantidad, precio y fecha de compra.
 
 ```sql
 SELECT
@@ -235,9 +237,13 @@ WHERE cc.fecha = '{fecha}'
 ORDER BY cc.fecha, l.titulo;
 ```
 
-## Libros con stock menor a 5
+---
+
+### Libros con stock menor a 5
 
 ![Vista de reporte: Libros con stock menor a 5](images/Reporte_stock_menor_a_5.png)
+
+Lista todos los libros cuya cantidad en existencia es inferior a 5 unidades, ordenados de menor a mayor stock.
 
 ```sql
 SELECT  l.isbn, l.titulo, e.cantidadexistencia AS stock, l.ubicacion
@@ -247,9 +253,13 @@ WHERE e.cantidadexistencia < 5
 ORDER BY e.cantidadexistencia;
 ```
 
-## Libros registrados por nombre de autor y editorial
+---
+
+### Libros registrados por autor y editorial
 
 ![Vista de reporte: Libros, autor y editorial](images/Reporte_libros_autor_editorial.png)
+
+Muestra el catálogo completo de libros con el nombre de su autor y editorial correspondiente, ordenados alfabéticamente por título.
 
 ```sql
 SELECT l.isbn, l.titulo, a.nombre AS autor, e.nombre AS editorial, l.ubicacion
@@ -258,6 +268,8 @@ JOIN autores a ON l.idautor = a.idautor
 JOIN editoriales e ON l.ideditorial = e.ideditorial
 ORDER BY l.titulo;
 ```
+
+---
 
 ## Rúbrica de evaluación
 
